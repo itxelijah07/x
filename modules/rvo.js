@@ -21,6 +21,7 @@ module.exports = {
       aliases: ['🪄', 'reveal', '🔓'],
       prefixes: [],
       silent: true,
+      returnsMedia: true,
 
       async execute(msg, args, { bot }) {
         const sock = bot.sock;

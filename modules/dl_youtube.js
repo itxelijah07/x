@@ -125,7 +125,7 @@ class YouTubeModule {
             }
 
             await this.bot.sendMessage(msg.key.remoteJid, message);
-            return ''; // No text response needed since media is sent
+            return null; // No text response needed since media is sent
         } catch (error) {
             console.error(`Error sending ${type}:`, error);
             return `${caption}\n\n*Failed to send media, here's the URL instead:* ${mediaUrl}`;

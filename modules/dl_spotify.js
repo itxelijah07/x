@@ -85,7 +85,7 @@ class SpotifyModule {
             };
 
             await this.bot.sendMessage(msg.key.remoteJid, message);
-            return ''; // No text response needed since media is sent
+            return null; // No text response needed since media is sent
         } catch (error) {
             console.error('Error sending audio:', error);
             return `${caption}\n\n*Failed to send audio, here's the URL instead:* ${mediaUrl}`;
