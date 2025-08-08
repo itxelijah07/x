@@ -48,6 +48,42 @@ class Helpers {
 
   }
 
+  static async smartMediaRespond(bot, originalMsg, options = {}) {
+    const {
+      actionFn = () => { throw new Error('No action provided'); },
+      processingText = '⏳ Processing media...',
+      errorText = '❌ Media processing failed.'
+    } = options;
+
+    if (!bot?.sock?.sendMessage || !originalMsg?.key?.remoteJid) return;
+
+    const jid = originalMsg.key.remoteJid;
+    
+    // Always send a separate processing message for media commands
+    const processingMsg = await bot.sock.sendMessage(jid, { text: processingText });
+
+    try {
+      const result = await actionFn();
+
+      // Delete the processing message after successful media send
+      await bot.sock.sendMessage(jid, {
+        delete: processingMsg.key
+      });
+
+      return result;
+
+    } catch (error) {
+      // Edit processing message to show error
+      await bot.sock.sendMessage(jid, {
+        text: `${errorText}${error.message ? `\n\n🔍 ${error.message}` : ''}`,
+        edit: processingMsg.key
+      });
+
+      error._handledBySmartError = true;
+      throw error;
+    }
+  }
+
   static async sendCommandResponse(bot, originalMsg, responseText) {
     await this.smartErrorRespond(bot, originalMsg, {
       processingText: '⏳ Checking command...',

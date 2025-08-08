@@ -424,7 +424,7 @@ await context.bot.sendMessage(context.sender, { text: helpText.trim() });
                     const ui = cmd.ui || {};
 
                     // Only wrap commands that have UI config (structured modules)
-const shouldWrap = cmd.ui && (cmd.autoWrap !== false);
+const shouldWrap = cmd.ui && (cmd.autoWrap !== false) && !cmd.returnsMedia;
 const wrappedCmd = shouldWrap ? {
     ...cmd,
     execute: async (msg, params, context) => {
@@ -436,16 +436,32 @@ const wrappedCmd = shouldWrap ? {
             }
         });
     }
-} : cmd; // Use original command without wrapping
+} : cmd;
+
+// For media commands, use a different wrapper that shows progress but doesn't edit
+const mediaWrappedCmd = cmd.returnsMedia ? {
+    ...cmd,
+    execute: async (msg, params, context) => {
+        await helpers.smartMediaRespond(context.bot, msg, {
+            processingText: ui.processingText || `⏳ Processing *${cmd.name}*...`,
+            errorText: ui.errorText || `❌ *${cmd.name}* failed.`,
+            actionFn: async () => {
+                return await cmd.execute(msg, params, context);
+            }
+        });
+    }
+} : null;
+
+const finalCmd = mediaWrappedCmd || wrappedCmd;
 
 
-                    this.bot.messageHandler.registerCommandHandler(cmd.name, wrappedCmd);
+                    this.bot.messageHandler.registerCommandHandler(cmd.name, finalCmd);
 
                     // Register aliases if they exist
                     if (cmd.aliases && Array.isArray(cmd.aliases)) {
                         for (const alias of cmd.aliases) {
                             if (alias && typeof alias === 'string') {
-                                this.bot.messageHandler.registerCommandHandler(alias, wrappedCmd);
+                                this.bot.messageHandler.registerCommandHandler(alias, finalCmd);
                                 logger.debug(`📝 Registered alias: ${alias} -> ${cmd.name}`);
                             }
                         }

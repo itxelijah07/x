@@ -23,6 +23,7 @@ class DownloaderModule {
                 description: 'Downloads a TikTok video.',
                 usage: '.tiktok <url>',
                 permissions: 'public',
+                returnsMedia: true,
                 ui: {
                     processingText: '⏳ *Processing TikTok Download...*\n\n🔄 Working on your request...',
                     errorText: '❌ *TikTok Download Failed*'
@@ -34,6 +35,7 @@ class DownloaderModule {
                 description: 'Downloads Instagram content (post or story).',
                 usage: '.instagram <url>',
                 permissions: 'public',
+                returnsMedia: false, // This returns text with URLs
                 ui: {
                     processingText: '⏳ *Processing Instagram Download...*\n\n🔄 Working on your request...',
                     errorText: '❌ *Instagram Download Failed*'
@@ -45,6 +47,7 @@ class DownloaderModule {
                 description: 'Downloads a track from SoundCloud.',
                 usage: '.soundcloud <url>',
                 permissions: 'public',
+                returnsMedia: true,
                 ui: {
                     processingText: '⏳ *Processing SoundCloud Download...*\n\n🔄 Working on your request...',
                     errorText: '❌ *SoundCloud Download Failed*'
@@ -56,6 +59,7 @@ class DownloaderModule {
                 description: 'Downloads a video from Twitter / X.com.',
                 usage: '.twitter <url>',
                 permissions: 'public',
+                returnsMedia: true,
                 ui: {
                     processingText: '⏳ *Processing Twitter Download...*\n\n🔄 Working on your request...',
                     errorText: '❌ *Twitter Download Failed*'
@@ -68,6 +72,7 @@ class DownloaderModule {
                 description: 'Downloads a video from Facebook.',
                 usage: '.facebook <url>',
                 permissions: 'public',
+                returnsMedia: true,
                 ui: {
                     processingText: '⏳ *Processing Facebook Download...*\n\n🔄 Working on your request...',
                     errorText: '❌ *Facebook Download Failed*'

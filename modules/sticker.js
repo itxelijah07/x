@@ -21,6 +21,7 @@ class StickerModule {
                 usage: '.sticker (reply to image/video)',
                 aliases: ['s'],
                 permissions: 'public',
+                returnsMedia: true,
                 ui: {
                     processingText: '🎨 *Creating Sticker...*\n\n⏳ Converting to sticker format...',
                     errorText: '❌ *Sticker Creation Failed*'
@@ -32,6 +33,7 @@ class StickerModule {
                 description: 'Create sticker from text',
                 usage: '.textsticker <text>',
                 permissions: 'public',
+                returnsMedia: true,
                 ui: {
                     processingText: '📝 *Creating Text Sticker...*\n\n⏳ Generating sticker from text...',
                     errorText: '❌ *Text Sticker Creation Failed*'
@@ -43,6 +45,7 @@ class StickerModule {
                 description: 'Create animated sticker from video/GIF',
                 usage: '.anim (reply to video/GIF)',
                 permissions: 'public',
+                returnsMedia: true,
                 ui: {
                     processingText: '🎬 *Creating Animated Sticker...*\n\n⏳ Processing animation...',
                     errorText: '❌ *Animated Sticker Creation Failed*'
@@ -54,6 +57,7 @@ class StickerModule {
                 description: 'Steal sticker and recreate with custom metadata',
                 usage: '.steal <pack_name> | <author> (reply to sticker)',
                 permissions: 'public',
+                returnsMedia: true,
                 ui: {
                     processingText: '🕵️ *Stealing Sticker...*\n\n⏳ Recreating with new metadata...',
                     errorText: '❌ *Sticker Stealing Failed*'
@@ -116,7 +120,8 @@ class StickerModule {
                 sticker: stickerBuffer
             });
 
-            return `✅ *Sticker Created Successfully*\n\n🎨 Type: ${mediaType.toUpperCase()}\n📦 Pack: HyperWa Stickers\n⏰ ${new Date().toLocaleTimeString()}`;
+            // For media commands, we don't return text since media was already sent
+            return null;
 
         } catch (error) {
             throw new Error(`Sticker creation failed: ${error.message}`);
@@ -198,7 +203,7 @@ class StickerModule {
                 sticker: stickerBuffer
             });
 
-            return `✅ *Animated Sticker Created*\n\n🎬 Duration: ${Math.round(videoMessage.seconds || 0)}s\n📦 Pack: HyperWa Animated\n⏰ ${new Date().toLocaleTimeString()}`;
+            return null;
 
         } catch (error) {
             throw new Error(`Animated sticker creation failed: ${error.message}`);
@@ -251,7 +256,7 @@ class StickerModule {
                 sticker: newStickerBuffer
             });
 
-            return `🕵️ *Sticker Stolen Successfully*\n\n📦 New Pack: "${packName}"\n👤 New Author: "${authorName}"\n🎭 Type: ${quotedMsg.stickerMessage.isAnimated ? 'Animated' : 'Static'}\n⏰ ${new Date().toLocaleTimeString()}`;
+            return null;
 
         } catch (error) {
             throw new Error(`Sticker stealing failed: ${error.message}`);
